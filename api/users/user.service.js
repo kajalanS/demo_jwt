@@ -1,38 +1,26 @@
 const pool = require("../../config/database");
 
-
 module.exports = {
-    create: (data, callBack) => {
-      pool.getConnection((error,conn)=>{
-        conn.query(`insert into registration(firstName, lastName, gender, email, password, number) values(?,?,?,?,?,?)`,
-          [
-            data.firstName,
-            data.lastName,
-            data.gender,
-            data.email,
-            data.password,
-            data.number
-          ],
-  (error, results, fields) => {
-    if (error) {
-      return callBack(error);
-      // console.log("error");
-    }
-    return callBack(null, results);
-  }
-        );
-      })
-      
-    }
-}
+  create: (data, callBack) => {
+    const res = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    };
 
-
-
-
-
-
-
-
+    pool.getConnection((error, conn) => {
+      conn.query("INSERT INTO users set ?", res, (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+          // console.log("error");
+        }
+        return callBack(null, results);
+      });
+    });
+  },
+};
 
 // (error, results, fields) => {
 //   if (error) {
